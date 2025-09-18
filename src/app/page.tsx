@@ -39,8 +39,27 @@ function LoadingWhisperWall() {
   );
 }
 
+// Function to shuffle an array
+function shuffle(array: any[]) {
+    let currentIndex = array.length, randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex !== 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+}
+
 export default async function Home() {
-  const posts: Post[] = initialPosts;
+  const posts: Post[] = shuffle([...initialPosts]);
   const postInputs: ClusterPostsByThemeInput = posts.map((p) => ({
     id: p.id,
     text: p.text,
