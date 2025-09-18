@@ -12,6 +12,9 @@ import {
 import { PostForm } from '@/components/post-form';
 import ThemeClusterComponent from '@/components/theme-cluster';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar';
+import { Button } from './ui/button';
+import { PenSquare } from 'lucide-react';
 
 interface WhisperWallClientProps {
   initialPosts: Post[];
@@ -85,47 +88,64 @@ export default function WhisperWallClient({
   }, [posts]);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="py-8">
-        <div className="container mx-auto text-center">
-          <h1 className="text-5xl font-headline font-bold text-primary">
-            WhisperLink
-          </h1>
-          <p className="text-muted-foreground mt-2 text-lg">
-            Share your story. Find your connection.
-          </p>
-        </div>
-      </header>
-
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <PostForm onPostSubmitted={handlePostSubmitted} />
-
-        <div className="mt-12">
-          {isClustering ? (
-            <div className="space-y-12">
-                {[1, 2, 3].map((i) => (
-                    <div key={i} className="space-y-4">
-                    <Skeleton className="h-8 w-1/3" />
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        <Skeleton className="h-48 rounded-lg" />
-                        <Skeleton className="h-48 rounded-lg" />
-                        <Skeleton className="h-48 rounded-lg" />
-                    </div>
-                    </div>
-                ))}
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader>
+          <div className="text-center py-4">
+            <h1 className="text-3xl font-headline font-bold text-primary">
+              WhisperLink
+            </h1>
+          </div>
+        </SidebarHeader>
+        <SidebarContent>
+            <div className='p-4'>
+                <Button className='w-full'>
+                    <PenSquare className='mr-2' />
+                    New Whisper
+                </Button>
             </div>
-          ) : (
-            clusters.map((cluster) => (
-              <ThemeClusterComponent key={cluster.theme} cluster={cluster} onResponseSubmitted={handleResponseSubmitted} />
-            ))
-          )}
-        </div>
-      </main>
+        </SidebarContent>
+      </Sidebar>
+      <SidebarInset>
+        <div className="flex flex-col min-h-screen">
+            <header className="py-8 flex items-center gap-4">
+                <SidebarTrigger />
+                <p className="text-muted-foreground text-lg">
+                    Share your story. Find your connection.
+                </p>
+            </header>
 
-      <footer className="py-6 text-center text-muted-foreground text-sm">
-        <p>WhisperLink &copy; {new Date().getFullYear()}. Anonymity and safety are our priorities.</p>
-        <p className="mt-1">Powered by Google AI and a community that cares.</p>
-      </footer>
-    </div>
+            <main className="flex-grow container mx-auto px-4 py-8">
+                <PostForm onPostSubmitted={handlePostSubmitted} />
+
+                <div className="mt-12">
+                {isClustering ? (
+                    <div className="space-y-12">
+                        {[1, 2, 3].map((i) => (
+                            <div key={i} className="space-y-4">
+                            <Skeleton className="h-8 w-1/3" />
+                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                <Skeleton className="h-48 rounded-lg" />
+                                <Skeleton className="h-48 rounded-lg" />
+                                <Skeleton className="h-48 rounded-lg" />
+                            </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    clusters.map((cluster) => (
+                    <ThemeClusterComponent key={cluster.theme} cluster={cluster} onResponseSubmitted={handleResponseSubmitted} />
+                    ))
+                )}
+                </div>
+            </main>
+
+            <footer className="py-6 text-center text-muted-foreground text-sm">
+                <p>WhisperLink &copy; {new Date().getFullYear()}. Anonymity and safety are our priorities.</p>
+                <p className="mt-1">Powered by Google AI and a community that cares.</p>
+            </footer>
+        </div>
+        </SidebarInset>
+    </SidebarProvider>
   );
 }

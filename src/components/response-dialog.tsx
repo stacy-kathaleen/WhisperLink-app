@@ -21,6 +21,7 @@ import { Post, Response as ResponseType } from '@/lib/types';
 import { ScrollArea } from './ui/scroll-area';
 import { Skeleton } from './ui/skeleton';
 import { TimeAgo } from './time-ago';
+import { Card, CardContent } from './ui/card';
 
 interface ResponseDialogProps {
   post: Post;
@@ -161,30 +162,29 @@ export default function ResponseDialog({
                 maxLength={MAX_RESPONSE_LENGTH}
                 className="min-h-[100px]"
             />
-            <p className={`text-sm text-right ${
-                responseText.length > MAX_RESPONSE_LENGTH ? 'text-destructive' : 'text-muted-foreground'
-                }`}>
-                {responseText.length} / {MAX_RESPONSE_LENGTH}
-            </p>
+             <div className="flex justify-between items-center">
+                <p className={`text-sm ${
+                    responseText.length > MAX_RESPONSE_LENGTH ? 'text-destructive' : 'text-muted-foreground'
+                    }`}>
+                    {responseText.length} / {MAX_RESPONSE_LENGTH}
+                </p>
+                <Button onClick={handleSubmit} disabled={isSubmitting}>
+                    {isSubmitting ? (
+                    <Loader2 className="animate-spin" />
+                    ) : (
+                    <Send />
+                    )}
+                    <span>Send Response</span>
+                </Button>
+            </div>
         </div>
 
         <DialogFooter>
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={isSubmitting}>
-            {isSubmitting ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              <Send />
-            )}
-            <span>Send Response</span>
-          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
-
-// Dummy Card component to resolve TS error inside the dialog
-import { Card, CardContent } from './ui/card';
