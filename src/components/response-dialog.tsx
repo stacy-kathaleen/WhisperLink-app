@@ -20,6 +20,7 @@ import { Loader2, Send, Sparkles } from 'lucide-react';
 import { Post, Response as ResponseType } from '@/lib/types';
 import { ScrollArea } from './ui/scroll-area';
 import { formatDistanceToNow } from 'date-fns';
+import { Skeleton } from './ui/skeleton';
 
 interface ResponseDialogProps {
   post: Post;
