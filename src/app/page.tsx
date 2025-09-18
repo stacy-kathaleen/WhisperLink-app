@@ -83,8 +83,8 @@ export default async function Home() {
     }
   } catch (error) {
     console.error('Failed to cluster posts on initial load:', error);
-    // If clustering fails, we fall back to a simple list of the subset of posts.
-    initialClusters = [{ theme: 'Recent Whispers', posts: postsForClustering }];
+    // If clustering fails, we fall back to a simple list of ALL posts.
+    initialClusters = [{ theme: 'Recent Whispers', posts: allPosts }];
   }
 
   return (
