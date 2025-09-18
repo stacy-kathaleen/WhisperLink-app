@@ -109,9 +109,9 @@ export default function WhisperWallClient({
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <div className="text-center py-4 flex items-center justify-center gap-2">
+          <div className="text-center py-4 flex items-center justify-center gap-2 border-b">
             <Link className="w-8 h-8 text-primary" />
-            <h1 className="text-3xl font-headline font-bold text-primary">
+            <h1 className="text-2xl font-headline font-bold text-foreground">
               WhisperLink
             </h1>
           </div>
@@ -120,7 +120,7 @@ export default function WhisperWallClient({
             <div className='p-4'>
               <Dialog open={isPostFormOpen} onOpenChange={setIsPostFormOpen}>
                 <DialogTrigger asChild>
-                    <Button className='w-full'>
+                    <Button className='w-full' size="lg">
                         <PenSquare className='mr-2' />
                         New Whisper
                     </Button>
@@ -137,10 +137,10 @@ export default function WhisperWallClient({
       </Sidebar>
       <SidebarInset>
         <div className="flex flex-col min-h-screen">
-            <header className="py-8 flex items-center gap-4">
+            <header className="p-4 flex items-center gap-4 border-b sticky top-0 bg-background/80 backdrop-blur-sm">
                 <SidebarTrigger />
-                <p className="text-muted-foreground text-lg flex-grow">
-                    Share your story. Find your connection.
+                <p className="text-muted-foreground text-sm md:text-base flex-grow">
+                    An anonymous, AI-mediated peer support platform.
                 </p>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -167,7 +167,7 @@ export default function WhisperWallClient({
             </header>
 
             <main className="flex-grow container mx-auto px-4 py-8">
-                <div className="mt-12">
+                <div className="mt-8">
                 {isClustering ? (
                     <div className="space-y-12">
                         {[1, 2, 3].map((i) => (
@@ -189,7 +189,7 @@ export default function WhisperWallClient({
                 </div>
             </main>
 
-            <footer className="py-6 text-center text-muted-foreground text-sm">
+            <footer className="py-6 text-center text-muted-foreground text-xs border-t">
                 <p>WhisperLink &copy; {new Date().getFullYear()}. Anonymity and safety are our priorities.</p>
                 <p className="mt-1">Powered by Google AI and a community that cares.</p>
             </footer>
@@ -198,5 +198,3 @@ export default function WhisperWallClient({
     </SidebarProvider>
   );
 }
-
-    
