@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useTransition, useCallback } from 'react';
@@ -17,6 +18,7 @@ import { Button } from './ui/button';
 import { Bell, Link, PenSquare } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Separator } from './ui/separator';
 
 interface WhisperWallClientProps {
   initialPosts: Post[];
@@ -147,13 +149,17 @@ export default function WhisperWallClient({
                       <span className="sr-only">Notifications</span>
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-80">
-                    <div className="grid gap-4">
-                      <div className="space-y-2">
+                  <PopoverContent className="w-80" align="end">
+                    <div className="grid gap-2">
+                      <div className="space-y-1">
                         <h4 className="font-medium leading-none">Notifications</h4>
                         <p className="text-sm text-muted-foreground">
-                          You have no new notifications.
+                          Real-time notifications are not yet enabled.
                         </p>
+                      </div>
+                      <Separator />
+                      <div className="text-center text-xs text-muted-foreground p-4">
+                        <p>This is where you'll see updates when people respond to your whispers.</p>
                       </div>
                     </div>
                   </PopoverContent>
@@ -192,3 +198,5 @@ export default function WhisperWallClient({
     </SidebarProvider>
   );
 }
+
+    
