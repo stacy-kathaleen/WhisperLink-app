@@ -19,8 +19,8 @@ import {
 import { Loader2, Send, Sparkles } from 'lucide-react';
 import { Post, Response as ResponseType } from '@/lib/types';
 import { ScrollArea } from './ui/scroll-area';
-import { formatDistanceToNow } from 'date-fns';
 import { Skeleton } from './ui/skeleton';
+import { TimeAgo } from './time-ago';
 
 interface ResponseDialogProps {
   post: Post;
@@ -105,7 +105,7 @@ export default function ResponseDialog({
         <Card className="bg-muted/50 border-none shadow-none">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground mb-2">
-                Whispered {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
+                Whispered <TimeAgo date={post.createdAt} />
             </p>
             <p>{post.text}</p>
           </CardContent>
@@ -118,7 +118,9 @@ export default function ResponseDialog({
                 {post.responses.map(res => (
                     <div key={res.id} className="text-sm p-2 border-b last:border-b-0">
                         <p>{res.text}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{formatDistanceToNow(new Date(res.createdAt), { addSuffix: true })}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          <TimeAgo date={res.createdAt} />
+                        </p>
                     </div>
                 ))}
                 </ScrollArea>

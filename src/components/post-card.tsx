@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { formatDistanceToNow } from 'date-fns';
 import {
   Card,
   CardContent,
@@ -12,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { MessageSquare, Heart } from 'lucide-react';
 import ResponseDialog from '@/components/response-dialog';
 import type { Post, Response as ResponseType } from '@/lib/types';
+import { TimeAgo } from './time-ago';
 
 interface PostCardProps {
   post: Post;
@@ -29,7 +29,7 @@ export default function PostCard({ post, onResponseSubmitted }: PostCardProps) {
       >
         <CardHeader>
           <p className="text-sm text-muted-foreground">
-            {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
+            <TimeAgo date={post.createdAt} />
           </p>
         </CardHeader>
         <CardContent className="flex-grow">
