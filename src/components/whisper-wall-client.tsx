@@ -14,7 +14,8 @@ import ThemeClusterComponent from '@/components/theme-cluster';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar';
 import { Button } from './ui/button';
-import { PenSquare } from 'lucide-react';
+import { Bell, PenSquare } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
 interface WhisperWallClientProps {
   initialPosts: Post[];
@@ -84,8 +85,20 @@ export default function WhisperWallClient({
         return p;
     });
     setPosts(updatedPosts);
-    // No need to re-cluster when a response is added
-  }, [posts]);
+
+    // Also update the posts within the clusters
+    const updatedClusters = clusters.map(cluster => ({
+      ...cluster,
+      posts: cluster.posts.map(p => {
+        if (p.id === postId) {
+            return { ...p, responses: [newResponse, ...p.responses] };
+        }
+        return p;
+      })
+    }));
+    setClusters(updatedClusters);
+
+  }, [posts, clusters]);
 
   return (
     <SidebarProvider>
@@ -110,9 +123,27 @@ export default function WhisperWallClient({
         <div className="flex flex-col min-h-screen">
             <header className="py-8 flex items-center gap-4">
                 <SidebarTrigger />
-                <p className="text-muted-foreground text-lg">
+                <p className="text-muted-foreground text-lg flex-grow">
                     Share your story. Find your connection.
                 </p>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <Bell />
+                      <span className="sr-only">Notifications</span>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80">
+                    <div className="grid gap-4">
+                      <div className="space-y-2">
+                        <h4 className="font-medium leading-none">Notifications</h4>
+                        <p className="text-sm text-muted-foreground">
+                          You have no new notifications.
+                        </p>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
             </header>
 
             <main className="flex-grow container mx-auto px-4 py-8">
