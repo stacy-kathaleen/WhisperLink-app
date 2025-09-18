@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -24,8 +25,7 @@ export default function PostCard({ post, onResponseSubmitted }: PostCardProps) {
   return (
     <>
       <Card
-        className="flex flex-col h-full hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-        onClick={() => setIsDialogOpen(true)}
+        className="flex flex-col h-full hover:shadow-xl transition-shadow duration-300"
       >
         <CardHeader>
           <p className="text-sm text-muted-foreground">
@@ -42,7 +42,7 @@ export default function PostCard({ post, onResponseSubmitted }: PostCardProps) {
               {post.responses.length} {post.responses.length === 1 ? 'response' : 'responses'}
             </span>
           </div>
-          <Button variant="ghost" size="sm" className="text-accent hover:text-accent hover:bg-accent/10">
+          <Button variant="ghost" size="sm" className="text-accent hover:text-accent hover:bg-accent/10" onClick={() => setIsDialogOpen(true)}>
             <Heart className="w-4 h-4 mr-2" />
             Respond
           </Button>
