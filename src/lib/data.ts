@@ -60,4 +60,52 @@ export const initialPosts: Post[] = [
     ],
     createdAt: new Date(Date.now() - 1000 * 3600 * 28).toISOString(),
   },
+  {
+    id: '7',
+    text: "I'm starting to feel better after a rough couple of weeks. It's a slow process, but I'm getting there.",
+    responses: [],
+    createdAt: new Date(Date.now() - 1000 * 3600 * 36).toISOString(),
+  },
+  {
+    id: '8',
+    text: 'Feeling anxious about a presentation at work tomorrow. Any tips for calming nerves?',
+    responses: [
+      {
+        id: 'r5',
+        text: 'Take deep breaths! You got this.',
+        createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+      }
+    ],
+    createdAt: new Date(Date.now() - 1000 * 3600 * 48).toISOString(),
+  },
+  {
+    id: '9',
+    text: 'I wish I could just disappear for a while. Everything is too much right now.',
+    responses: [],
+    createdAt: new Date(Date.now() - 1000 * 3600 * 52).toISOString(),
+  },
+  {
+    id: '10',
+    text: "Finally finished a creative project I've been working on for months. It feels so good to see it complete.",
+    responses: [],
+    createdAt: new Date(Date.now() - 1000 * 3600 * 60).toISOString(),
+  },
+  {
+    id: '11',
+    text: 'My dog is the only one who really understands me. His cuddles are the best therapy.',
+    responses: [
+       {
+        id: 'r6',
+        text: 'Dogs are the best listeners!',
+        createdAt: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
+      }
+    ],
+    createdAt: new Date(Date.now() - 1000 * 3600 * 72).toISOString(),
+  },
+  {
+    id: '12',
+    text: 'I feel like I\'m not good enough. Comparing myself to others on social media is really getting to me.',
+    responses: [],
+    createdAt: new Date(Date.now() - 1000 * 3600 * 80).toISOString(),
+  }
 ];
