@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { submitPostAction } from '@/app/actions';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Loader2, Send } from 'lucide-react';
@@ -59,11 +59,8 @@ export function PostForm({ onPostSubmitted }: PostFormProps) {
   };
 
   return (
-    <Card className="max-w-2xl mx-auto shadow-lg border-2 border-primary/20">
-      <CardHeader>
-        <CardTitle className="font-headline text-2xl">Share a Whisper</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <Card className="shadow-none border-0">
+      <CardContent className="p-0">
         <form onSubmit={handleSubmit} className="space-y-4">
           <Textarea
             placeholder="What's on your mind? Share your feelings anonymously..."

@@ -14,8 +14,9 @@ import ThemeClusterComponent from '@/components/theme-cluster';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar';
 import { Button } from './ui/button';
-import { Bell, PenSquare } from 'lucide-react';
+import { Bell, Link, PenSquare } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 
 interface WhisperWallClientProps {
   initialPosts: Post[];
@@ -40,6 +41,7 @@ export default function WhisperWallClient({
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [clusters, setClusters] = useState<ThemeCluster[]>(initialClusters);
   const [isClustering, startClustering] = useTransition();
+  const [isPostFormOpen, setIsPostFormOpen] = useState(false);
   const { toast } = useToast();
 
   const refetchClusters = useCallback(async (currentPosts: Post[]) => {
@@ -73,6 +75,7 @@ export default function WhisperWallClient({
       const updatedPosts = [newPost, ...posts];
       setPosts(updatedPosts);
       refetchClusters(updatedPosts);
+      setIsPostFormOpen(false);
     },
     [posts, refetchClusters]
   );
@@ -104,7 +107,8 @@ export default function WhisperWallClient({
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <div className="text-center py-4">
+          <div className="text-center py-4 flex items-center justify-center gap-2">
+            <Link className="w-8 h-8 text-primary" />
             <h1 className="text-3xl font-headline font-bold text-primary">
               WhisperLink
             </h1>
@@ -112,10 +116,20 @@ export default function WhisperWallClient({
         </SidebarHeader>
         <SidebarContent>
             <div className='p-4'>
-                <Button className='w-full'>
-                    <PenSquare className='mr-2' />
-                    New Whisper
-                </Button>
+              <Dialog open={isPostFormOpen} onOpenChange={setIsPostFormOpen}>
+                <DialogTrigger asChild>
+                    <Button className='w-full'>
+                        <PenSquare className='mr-2' />
+                        New Whisper
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Share a Whisper</DialogTitle>
+                    </DialogHeader>
+                    <PostForm onPostSubmitted={handlePostSubmitted} />
+                </DialogContent>
+              </Dialog>
             </div>
         </SidebarContent>
       </Sidebar>
@@ -147,8 +161,6 @@ export default function WhisperWallClient({
             </header>
 
             <main className="flex-grow container mx-auto px-4 py-8">
-                <PostForm onPostSubmitted={handlePostSubmitted} />
-
                 <div className="mt-12">
                 {isClustering ? (
                     <div className="space-y-12">
