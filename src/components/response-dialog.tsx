@@ -136,50 +136,49 @@ export default function ResponseDialog({
             </h4>
             {isLoadingSuggestions ? (
                 <div className='flex gap-2'>
-                    <Skeleton className="h-8 w-1/3" />
-                    <Skeleton className="h-8 w-1/3" />
+                    <Skeleton className="h-10 w-1/3" />
+                    <Skeleton className="h-10 w-1/3" />
                 </div>
             ) : (
                 <div className="flex flex-wrap gap-2">
                     {suggestions.map((suggestion, index) => (
                         <Button
-                        key={index}
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setResponseText(suggestion)}
+                          key={index}
+                          variant="outline"
+                          size="sm"
+                          className="h-auto whitespace-normal text-left"
+                          onClick={() => setResponseText(suggestion)}
                         >
-                        {suggestion}
+                          {suggestion}
                         </Button>
                     ))}
                 </div>
             )}
         </div>
 
-        <div className="grid gap-4">
-          <div className="space-y-2">
-              <Textarea
-                  placeholder="Write your own supportive response..."
-                  value={responseText}
-                  onChange={(e) => setResponseText(e.target.value)}
-                  maxLength={MAX_RESPONSE_LENGTH}
-                  className="min-h-[100px]"
-              />
-              <div className="flex justify-between items-center">
-                  <p className={`text-sm ${
-                      responseText.length > MAX_RESPONSE_LENGTH ? 'text-destructive' : 'text-muted-foreground'
-                      }`}>
-                      {responseText.length} / {MAX_RESPONSE_LENGTH}
-                  </p>
-                  <Button onClick={handleSubmit} disabled={isSubmitting}>
-                      {isSubmitting ? (
-                      <Loader2 className="animate-spin" />
-                      ) : (
-                      <Send />
-                      )}
-                      <span>Send Response</span>
-                  </Button>
-              </div>
-          </div>
+        <div className="space-y-2">
+            <Textarea
+                placeholder="Write your own supportive response..."
+                value={responseText}
+                onChange={(e) => setResponseText(e.target.value)}
+                maxLength={MAX_RESPONSE_LENGTH}
+                className="min-h-[100px]"
+            />
+            <div className="flex justify-between items-center">
+                <p className={`text-sm ${
+                    responseText.length > MAX_RESPONSE_LENGTH ? 'text-destructive' : 'text-muted-foreground'
+                    }`}>
+                    {responseText.length} / {MAX_RESPONSE_LENGTH}
+                </p>
+                <Button onClick={handleSubmit} disabled={isSubmitting}>
+                    {isSubmitting ? (
+                    <Loader2 className="animate-spin" />
+                    ) : (
+                    <Send />
+                    )}
+                    <span>Send Response</span>
+                </Button>
+            </div>
         </div>
 
         <DialogFooter>
