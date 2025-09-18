@@ -13,12 +13,13 @@ import {
 import { PostForm } from '@/components/post-form';
 import ThemeClusterComponent from '@/components/theme-cluster';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar';
 import { Button } from './ui/button';
 import { Bell, Link, PenSquare } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Separator } from './ui/separator';
+import { ThemeToggle } from './theme-toggle';
 
 interface WhisperWallClientProps {
   initialPosts: Post[];
@@ -134,6 +135,11 @@ export default function WhisperWallClient({
               </Dialog>
             </div>
         </SidebarContent>
+        <SidebarFooter>
+          <div className='p-4'>
+            <ThemeToggle />
+          </div>
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <div className="flex flex-col min-h-screen">
