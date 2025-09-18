@@ -62,8 +62,14 @@ function shuffle(array: any[]) {
 
 
 export default async function Home() {
-  const posts: Post[] = shuffle(initialPosts);
-  const postInputs: ClusterPostsByThemeInput = posts.map((p) => ({
+  // To avoid overloading the model and to show variety, we shuffle the posts.
+  const allPosts = shuffle(initialPosts);
+
+  // We'll take a random subset of posts for the initial clustering.
+  // This reduces the payload and the likelihood of a 503 error.
+  const postsForClustering = allPosts.slice(0, 9);
+  
+  const postInputs: ClusterPostsByThemeInput = postsForClustering.map((p) => ({
     id: p.id,
     text: p.text,
   }));
@@ -72,17 +78,20 @@ export default async function Home() {
   try {
     if (postInputs.length > 0) {
       const clusteredOutput = await clusterPostsByTheme(postInputs);
-      initialClusters = mergeClustersWithPosts(clusteredOutput, posts);
+      // We merge with the *subset* of posts we sent for clustering
+      initialClusters = mergeClustersWithPosts(clusteredOutput, postsForClustering);
     }
   } catch (error) {
     console.error('Failed to cluster posts on initial load:', error);
-    initialClusters = [{ theme: 'Recent Whispers', posts: posts }];
+    // If clustering fails, we fall back to a simple list of the subset of posts.
+    initialClusters = [{ theme: 'Recent Whispers', posts: postsForClustering }];
   }
 
   return (
     <Suspense fallback={<LoadingWhisperWall />}>
       <WhisperWallClient
-        initialPosts={posts}
+        // We pass ALL posts to the client so it has the full dataset for client-side operations
+        initialPosts={allPosts} 
         initialClusters={initialClusters}
       />
     </Suspense>
