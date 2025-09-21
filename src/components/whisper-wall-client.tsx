@@ -15,7 +15,7 @@ import ThemeClusterComponent from '@/components/theme-cluster';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar';
 import { Button } from './ui/button';
-import { Bell, Link, PenSquare } from 'lucide-react';
+import { Bell, Link, PenSquare, RefreshCw } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Separator } from './ui/separator';
@@ -47,40 +47,61 @@ export default function WhisperWallClient({
   const [isPostFormOpen, setIsPostFormOpen] = useState(false);
   const { toast } = useToast();
 
-  const refetchClusters = useCallback(async (currentPosts: Post[]) => {
-    if (currentPosts.length === 0) {
+  const handleManualCluster = useCallback(() => {
+    if (posts.length === 0) {
       setClusters([]);
       return;
     }
     startClustering(async () => {
-      const postInputs: ClusterPostsByThemeInput = currentPosts.map((p) => ({
+      const postInputs: ClusterPostsByThemeInput = posts.map((p) => ({
         id: p.id,
         text: p.text,
       }));
       try {
         const clusteredOutput = await clusterPostsByTheme(postInputs);
-        const newClusters = mergeClustersWithPosts(clusteredOutput, currentPosts);
+        const newClusters = mergeClustersWithPosts(clusteredOutput, posts);
         setClusters(newClusters);
+        toast({
+          title: 'Success!',
+          description: 'The whispers have been regrouped into new themes.',
+        });
       } catch (error) {
         console.error('Failed to re-cluster posts:', error);
         toast({
           variant: 'destructive',
           title: 'Clustering Error',
-          description: 'Could not regroup the whispers. Displaying as a list.',
+          description: 'Could not regroup the whispers at this time. Please try again later.',
         });
-        setClusters([{ theme: 'Recent Whispers', posts: currentPosts }]);
       }
     });
-  }, [toast]);
+  }, [posts, toast]);
+
 
   const handlePostSubmitted = useCallback(
     (newPost: Post) => {
       const updatedPosts = [newPost, ...posts];
       setPosts(updatedPosts);
-      refetchClusters(updatedPosts);
+      
+      const recentWhispersTheme = 'Recent Whispers';
+      const existingClusterIndex = clusters.findIndex(c => c.theme === recentWhispersTheme);
+
+      if (existingClusterIndex !== -1) {
+        // Add to existing "Recent Whispers" theme
+        const updatedClusters = [...clusters];
+        updatedClusters[existingClusterIndex].posts = [newPost, ...updatedClusters[existingClusterIndex].posts];
+        setClusters(updatedClusters);
+      } else {
+        // Create new "Recent Whispers" theme and add it to the top
+        const newCluster: ThemeCluster = {
+          theme: recentWhispersTheme,
+          posts: [newPost],
+        };
+        setClusters([newCluster, ...clusters]);
+      }
+
       setIsPostFormOpen(false);
     },
-    [posts, refetchClusters]
+    [posts, clusters]
   );
   
   const handleResponseSubmitted = useCallback((postId: string, newResponse: ResponseType) => {
@@ -118,7 +139,7 @@ export default function WhisperWallClient({
           </div>
         </SidebarHeader>
         <SidebarContent>
-            <div className='p-4'>
+            <div className='p-4 space-y-2'>
               <Dialog open={isPostFormOpen} onOpenChange={setIsPostFormOpen}>
                 <DialogTrigger asChild>
                     <Button className='w-full' size="lg">
@@ -133,6 +154,14 @@ export default function WhisperWallClient({
                     <PostForm onPostSubmitted={handlePostSubmitted} />
                 </DialogContent>
               </Dialog>
+              <Button variant="outline" className="w-full" onClick={handleManualCluster} disabled={isClustering}>
+                  {isClustering ? (
+                      <RefreshCw className="mr-2 animate-spin" />
+                  ) : (
+                      <RefreshCw className="mr-2" />
+                  )}
+                  Refresh Themes
+              </Button>
             </div>
         </SidebarContent>
         <SidebarFooter>
@@ -143,7 +172,7 @@ export default function WhisperWallClient({
       </Sidebar>
       <SidebarInset>
         <div className="flex flex-col min-h-screen">
-            <header className="p-4 flex items-center gap-4 border-b sticky top-0 bg-background/80 backdrop-blur-sm">
+            <header className="p-4 flex items-center gap-4 border-b sticky top-0 bg-background/80 backdrop-blur-sm z-10">
                 <SidebarTrigger />
                 <p className="text-muted-foreground text-sm md:text-base flex-grow">
                     An anonymous, AI-mediated peer support platform.
